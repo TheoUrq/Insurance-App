@@ -11,6 +11,10 @@ namespace InsuranceApp
         static List<decimal> insuranceCosts = new List<decimal>();
         static List<string> categoryNames = new List<string>();
 
+        const string ERRORPOSITIVE = "ERROR: Please enter a positive integer.";
+        const string ERRORNAME = "ERROR: Please enter a device name.";
+        const string ERRORCATEGORY = "ERROR: Please enter an integer between 1 and 3.";
+
         static void CollectDeviceDetails()
         {
             Console.WriteLine("Enter how many different devices you want to insure:");
@@ -18,7 +22,7 @@ namespace InsuranceApp
             while (!int.TryParse(Console.ReadLine(), out numberOfDevices) || numberOfDevices <= 0)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("ERROR: Please enter a positive integer.");
+                Console.WriteLine(ERRORPOSITIVE);
                 Console.ForegroundColor = ConsoleColor.White;
             }
 
@@ -30,6 +34,7 @@ namespace InsuranceApp
 
         static void ProcessDevice(int deviceNumber)
         {
+            
             // Determine order (first, second, third, etc.)
             string order;
             switch (deviceNumber)
@@ -53,7 +58,7 @@ namespace InsuranceApp
                     break;
                 }
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("ERROR: Please enter a device name.");
+                Console.WriteLine(ERRORNAME);
                 Console.ForegroundColor = ConsoleColor.White;
             }
 
@@ -65,7 +70,7 @@ namespace InsuranceApp
                 if (int.TryParse(Console.ReadLine(), out quantity) && quantity > 0)
                     break;
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("ERROR: You must enter a positive integer.");
+                Console.WriteLine(ERRORPOSITIVE);
                 Console.ForegroundColor = ConsoleColor.White;
             }
 
@@ -77,7 +82,7 @@ namespace InsuranceApp
                 if (decimal.TryParse(Console.ReadLine(), out cost) && cost > 0)
                     break;
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("ERROR: You must enter a positive decimal value.");
+                Console.WriteLine(ERRORPOSITIVE);
                 Console.ForegroundColor = ConsoleColor.White;
             }
 
@@ -93,7 +98,7 @@ namespace InsuranceApp
                 if (int.TryParse(Console.ReadLine(), out category) && category >= 1 && category <= 3)
                     break;
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("ERROR: Please enter an integer between 1 and 3.");
+                Console.WriteLine(ERRORCATEGORY);
                 Console.ForegroundColor = ConsoleColor.White;
             }
             string categoryName = GetCategoryName(category);
@@ -107,10 +112,12 @@ namespace InsuranceApp
 
         static decimal CalculateInsuranceCost(int numberOfDevices, decimal costPerDevice)
         {
-            if (numberOfDevices <= 5)
+            const decimal DISCOUNT = 0.9m;
+            const int MINNUMDISCOUNT = 5;
+            if (numberOfDevices <= MINNUMDISCOUNT)
                 return numberOfDevices * costPerDevice;
-            decimal costFirstFive = 5 * costPerDevice;
-            decimal costRemaining = (numberOfDevices - 5) * costPerDevice * 0.9m;
+            decimal costFirstFive = MINNUMDISCOUNT * costPerDevice;
+            decimal costRemaining = (numberOfDevices - MINNUMDISCOUNT) * costPerDevice * DISCOUNT;
             return costFirstFive + costRemaining;
         }
 
